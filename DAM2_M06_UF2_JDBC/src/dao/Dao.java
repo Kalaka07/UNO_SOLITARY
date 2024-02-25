@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.Card;
 import model.Player;
@@ -98,5 +99,7 @@ public interface Dao {
 	 * @throws SQLException
 	 */
 	public void addGames(int playerId) throws SQLException;
+	
+	List<Player> getAllPlayers() throws SQLException;
 
 }

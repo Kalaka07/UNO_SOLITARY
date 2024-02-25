@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.Card;
 import model.Player;
@@ -89,7 +90,7 @@ public class DaoImpl implements Dao{
     public Player getPlayer(String user, String pass) throws SQLException {
         Player player = null;
 
-        String query = "SELECT * FROM player WHERE user = ? AND password = ?";
+        String query = "SELECT * FROM player WHERE userPlayer = ? AND passwordPlayer = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user);
@@ -98,7 +99,7 @@ public class DaoImpl implements Dao{
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     int id = resultSet.getInt("id");
-                    String playerName = resultSet.getString("name");
+                    String playerName = resultSet.getString("namePlayer");
                     int games = resultSet.getInt("games");
                     int victories = resultSet.getInt("victories");
 
@@ -230,6 +231,45 @@ public class DaoImpl implements Dao{
         } catch (SQLException e) {
             e.printStackTrace(); 
         }
+    }
+
+
+    public List<Player> getAllPlayers() throws SQLException {
+        List<Player> allPlayers = new ArrayList<>();
+        String query = "SELECT * FROM player";
+
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String playerName = resultSet.getString("namePlayer");
+                int games = resultSet.getInt("games");
+                int victories = resultSet.getInt("victories");
+
+                Player player = new Player(id, playerName, games, victories);
+                allPlayers.add(player);
+            }
+        }
+
+        return allPlayers;
+    }
+    
+    public ArrayList<Player> returnPlayers(){
+    	String allPlayers= "SELECT * FROM player";
+    	ArrayList<Player> jugadores = new ArrayList<>();
+    	try {
+    		PreparedStatement statement = this.connection.prepareStatement(allPlayers);
+    		ResultSet resultadito = statement.executeQuery();
+    		while(resultadito.next()) {
+    			jugadores.add(new Player(resultadito.getInt("id"), resultadito.getString("userPlayer"), resultadito.getString("passwordPlayer"),
+    							resultadito.getString("namePlayer"), resultadito.getInt("games"), resultadito.getInt("victories")));
+    		}
+    		return jugadores;
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return null;
     }
 
 

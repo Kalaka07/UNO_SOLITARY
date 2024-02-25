@@ -2,13 +2,15 @@ package controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import dao.FileImplement;
 
 import dao.DaoImpl;
 import model.Card;
 import model.Player;
+import model.Players;
 import utils.Color;
-import utils.Constants;
 import utils.Number;
 
 /**
@@ -37,7 +39,6 @@ public class Controller {
 		return controller;
 	}
 
-	
 	/**
 	 * Start game,
 	 * connect to db
@@ -89,6 +90,7 @@ public class Controller {
 				showCards();				
 				System.out.println("Press -1 to take a new one.");
 				System.out.println("Press -2 to exit game.");
+				System.out.println("Press -3 to Recu.");
 				int position=0;
 				do {
 					System.out.println("Select card to play.");
@@ -99,6 +101,9 @@ public class Controller {
 				} while (position>=cards.size());
 								
 				switch (position) {
+				case -3:
+	                showSaveOptions();
+	                break;
 				case -2:
 					correctCard = true;
 					end = true;
@@ -126,7 +131,9 @@ public class Controller {
 							break;
 						}
 					}
-
+					
+			
+					
 					// if correct card and no exit card
 					if (correctCard && !end) {
 						System.out.println("Well done, next turn");
@@ -269,5 +276,51 @@ public class Controller {
 		}
 	}
 
+	FileImplement fileImplement = new FileImplement();
+
+	private void showSaveOptions() {
+	    System.out.println("Choose an option to save player data:");
+	    System.out.println("F - Save player data in a file.");
+	    System.out.println("D - Save player data in XML using DOM library.");
+	    System.out.println("J - Save player data in XML using JAXB library.");
+
+	    String saveOption = s.next().toUpperCase();
+
+	    switch (saveOption) {
+	        case "F":
+	        	try {
+	                List<Player> allPlayers = dao.getAllPlayers();
+	                fileImplement.saveAllPlayersDataToFile(allPlayers);
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	                System.out.println("Error getting all players from the database.");
+	            }
+	            break;
+	        case "D":
+	        	    try {
+	        	        List<Player> allPlayers = dao.getAllPlayers();
+	        	        FileImplement fileImplement = new FileImplement();
+	        	        fileImplement.savePlayerDataToXMLUsingDOM(allPlayers);
+	        	    } catch (SQLException e) {
+	        	        e.printStackTrace();
+	        	        System.out.println("Error getting all players from the database.");
+	        	    }
+	        	    break;
+	        case "J":
+	            try {
+	                ArrayList<Player> allPlayers = dao.returnPlayers();
+	                fileImplement.savePlayerDataToXMLUsingJAXB(allPlayers);
+	                System.out.println("Player data saved to XML using JAXB library.");
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	                System.out.println("Error getting all players from the database.");
+	            }
+	            break;
+
+	        default:
+	            System.out.println("Invalid option. Please try again.");
+	            break;
+	    }
+	}
 
 }

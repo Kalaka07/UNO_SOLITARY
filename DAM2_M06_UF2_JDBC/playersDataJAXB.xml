@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Players>
+    <player>
+        <id>1</id>
+        <user>manin</user>
+        <password>123</password>
+        <name>manin</name>
+        <games>0</games>
+        <victories>0</victories>
+    </player>
+    <player>
+        <id>2</id>
+        <user>jordi</user>
+        <password>1234</password>
+        <name>jordi</name>
+        <games>0</games>
+        <victories>0</victories>
+    </player>
+</Players>
